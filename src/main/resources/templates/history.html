@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::content}, 'Extrato - Spring Payment')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Extrato</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-12">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                <div>
+                    <h2 class="fw-bold text-dark mb-1">Extrato</h2>
+                </div>
+                <div class="d-flex gap-2">
+                    <a href="/web/checkout" class="btn btn-primary btn-sm"><i class="bi bi-send-fill me-1"></i>Novo pagamento</a>
+                    <a href="/" class="btn btn-outline-dark btn-sm"><i class="bi bi-house-door-fill me-1"></i>Dashboard</a>
+                </div>
+            </div>
+
+            <h5 class="fw-bold text-dark mb-3">
+                <i class="bi bi-arrow-up-circle-fill text-danger me-2"></i>Enviadas
+                <span class="badge bg-secondary ms-2" th:text="${sentTransactions.size()}">0</span>
+            </h5>
+            <div class="card shadow-sm border-0 rounded-4 bg-white overflow-hidden mb-5">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                        <tr>
+                            <th class="py-3 px-4">ID da transação</th>
+                            <th class="py-3">Método</th>
+                            <th class="py-3">Favorecido</th>
+                            <th class="py-3 text-end">Valor</th>
+                            <th class="py-3 text-center">Status</th>
+                            <th class="py-3 px-4">Data / hora</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${sentTransactions.isEmpty()}">
+                            <td colspan="6" class="text-center text-muted py-5">Nenhuma transferência enviada ainda.</td>
+                        </tr>
+                        <tr th:each="tx : ${sentTransactions}">
+                            <td class="px-4">
+                                <code class="text-dark fw-bold" th:text="${tx.transactionCode}"></code>
+                            </td>
+                            <td>
+                                <span class="badge" th:classappend="${tx.method.name() == 'PIX' ? 'bg-success' : 'bg-primary'}" th:text="${tx.method.name() == 'PIX' ? 'Pix' : 'Limite de crédito'}"></span>
+                            </td>
+                            <td>
+                                <div class="fw-semibold text-dark" th:text="${tx.destinationName}"></div>
+                                <small class="text-muted" th:text="${tx.destinationKey != null ? tx.destinationKey : tx.destinationAccountNumber}"></small>
+                            </td>
+                            <td class="text-end">
+                                <span class="fw-bold text-nowrap text-danger" th:text="'- R$ ' + ${tx.amount}"></span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success px-2 py-1" th:text="${tx.status.descricao}"></span>
+                            </td>
+                            <td class="px-4 text-muted small text-nowrap" th:text="${#temporals.format(tx.createdAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h5 class="fw-bold text-dark mb-3">
+                <i class="bi bi-arrow-down-circle-fill text-success me-2"></i>Recebidas
+                <span class="badge bg-secondary ms-2" th:text="${receivedTransactions.size()}">0</span>
+            </h5>
+            <div class="card shadow-sm border-0 rounded-4 bg-white overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                        <tr>
+                            <th class="py-3 px-4">ID da transação</th>
+                            <th class="py-3">Remetente</th>
+                            <th class="py-3 text-end">Valor</th>
+                            <th class="py-3 text-center">Status</th>
+                            <th class="py-3 px-4">Data / hora</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="${receivedTransactions.isEmpty()}">
+                            <td colspan="6" class="text-center text-muted py-5">Nenhuma transferência recebida ainda.</td>
+                        </tr>
+                        <tr th:each="tx : ${receivedTransactions}">
+                            <td class="px-4">
+                                <code class="text-dark fw-bold" th:text="${tx.transactionCode}"></code>
+                            </td>
+                            <td>
+                                <div class="fw-semibold text-dark" th:text="${tx.customer.name}"></div>
+                                <small class="text-muted" th:text="${tx.customer.accountNumber}"></small>
+                            </td>
+                            <td class="text-end">
+                                <span class="fw-bold text-nowrap text-success" th:text="'+ R$ ' + ${tx.amount}"></span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-success bg-opacity-10 text-success border border-success px-2 py-1" th:text="${tx.status.descricao}"></span>
+                            </td>
+                            <td class="px-4 text-muted small text-nowrap" th:text="${#temporals.format(tx.createdAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

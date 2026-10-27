@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::content}, 'Novo Cliente - Payment Engine')}">
+<body>
+<div th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow border-0 rounded-4 p-4 bg-white">
+                <div class="text-center mb-4">
+                    <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 50px; height: 50px;">
+                        <i class="bi bi-person-plus-fill fs-4"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">Criar conta</h3>
+                    <p class="text-muted small mb-0">Cadastre um cliente com saldo e limite de crédito iniciais.</p>
+                </div>
+
+                <form th:action="@{/web/customers}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nome completo</label>
+                        <input type="text" name="name" class="form-control" required placeholder="Ex: Daniel Landuche" autocomplete="off">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">E-mail</label>
+                        <input type="email" name="email" class="form-control" required placeholder="exemplo@email.com" autocomplete="off">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Senha</label>
+                        <input type="password" name="password" class="form-control" required minlength="6" placeholder="Mínimo de 6 caracteres">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mb-3 shadow-sm">
+                        <i class="bi bi-check2-circle me-2"></i>Criar conta
+                    </button>
+                </form>
+
+                <div class="text-center mt-2">
+                    <a href="/" class="text-muted small text-decoration-none">
+                        <i class="bi bi-arrow-left me-1"></i>Voltar para o início
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
